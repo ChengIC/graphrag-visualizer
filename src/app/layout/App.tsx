@@ -11,11 +11,11 @@ import {
   ThemeProvider,
   IconButton,
   Tooltip,
-  Link,
+  // Link,
 } from "@mui/material";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import GitHubIcon from "@mui/icons-material/GitHub";
+// import GitHubIcon from "@mui/icons-material/GitHub";
 
 const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -89,7 +89,7 @@ const App: React.FC = () => {
             padding: { xs: "20px 0px", sm: "0" },
           }}
         >
-          <IconButton
+          {/* <IconButton
             component={Link}
             href="https://github.com/noworneverev/graphrag-visualizer"
             target="_blank"
@@ -97,7 +97,7 @@ const App: React.FC = () => {
             color="inherit"
           >
             <GitHubIcon />
-          </IconButton>
+          </IconButton> */}
           {darkMode ? (
             <Tooltip title="Turn on the light">
               <IconButton onClick={handleThemeChange} color="inherit">
