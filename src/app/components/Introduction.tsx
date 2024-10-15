@@ -32,9 +32,12 @@ const Introduction: React.FC = () => {
           <Typography variant="h6">Overview</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="body1" gutterBottom>
-            This application visualizes our generated knowledge graph data. Simply upload the parquet files to visualize the data without
-            needing additional software like Gephi, Neo4j, or Jupyter Notebook.
+        <Typography variant="body1" gutterBottom>
+          This application visualizes our generated knowledge graph data. Simply upload the parquet files to visualize the data without
+          needing additional software like Gephi, Neo4j, or Jupyter Notebook. {}
+            <Box component="span" sx={{ fontWeight: 'bold', color: 'warning.main' }}>
+              Note: Please wait for the graph to render when switching to the "Graph Visualization" tab. If it gets stuck, please refresh the page.
+            </Box>
           </Typography>
 
           <Box

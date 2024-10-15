@@ -1,6 +1,6 @@
 {
-  "short_name": "GraphRAG Viz",
-  "name": "GraphRAG Visualizer",
+  "short_name": "Graph Viz",
+  "name": "Graph Visualizer",
   "description": "Visualize Microsoft GraphRAG artifacts by uploading parquet files.",
   "icons": [
     {
