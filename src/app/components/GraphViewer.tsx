@@ -21,7 +21,7 @@ import {
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import Fuse from "fuse.js";
 import {
   CSS2DRenderer,
@@ -63,7 +63,7 @@ interface GraphViewerProps {
 }
 
 const NODE_R = 8;
-const MAX_SAMPLE_NODES = 3000; // New constant for sample size
+const MAX_SAMPLE_NODES = 5000; // New constant for sample size
 
 const sampleGraphData = (data: CustomGraphData, maxNodes: number): CustomGraphData => {
   if (data.nodes.length <= maxNodes) {
@@ -570,12 +570,12 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
     ? includeTextUnits && includeCommunities && includeCovariates
     : includeTextUnits && includeCommunities;
 
-  const clearSearchResults = () => {
-    const originalData = initialGraphData.current;
-    const processedData = originalData.nodes.length > MAX_SAMPLE_NODES ? sampleGraphData(originalData, MAX_SAMPLE_NODES) : originalData;
-    setGraphData(processedData);
-    setApiSearchResults(null);
-  };
+  // const clearSearchResults = () => {
+  //   const originalData = initialGraphData.current;
+  //   const processedData = originalData.nodes.length > MAX_SAMPLE_NODES ? sampleGraphData(originalData, MAX_SAMPLE_NODES) : originalData;
+  //   setGraphData(processedData);
+  //   setApiSearchResults(null);
+  // };
 
   return (
     <Box
@@ -663,7 +663,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
             alignItems: "flex-start",
           }}
         >
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Switch
                 checked={graphType === "3d"}
@@ -671,7 +671,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
               />
             }
             label="3D View"
-          />
+          /> */}
           <FormControlLabel
             control={
               <Switch
@@ -743,7 +743,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
             label="Include Communities"
           />
 
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Checkbox
                 checked={includeCovariates}
@@ -761,7 +761,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
               />
             }
             label="Include Covariates"
-          />
+          /> */}
         </FormGroup>
       </Box>
 
@@ -928,7 +928,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
       >
         <Typography variant="body2">Nodes: {nodeCount}</Typography>
         <Typography variant="body2">Relationships: {linkCount}</Typography>
-        <Button
+        {/* <Button
           variant="contained"
           onClick={toggleApiDrawer(true)}
           startIcon={<SearchIcon />}
@@ -943,7 +943,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
           disabled={apiSearchResults === null}
         >
           Clear Query Results
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );
