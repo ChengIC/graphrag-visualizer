@@ -63,6 +63,49 @@ interface GraphViewerProps {
 }
 
 const NODE_R = 8;
+const MAX_SAMPLE_NODES = 3000; // New constant for sample size
+
+const sampleGraphData = (data: CustomGraphData, maxNodes: number): CustomGraphData => {
+  if (data.nodes.length <= maxNodes) {
+    return data;  // Return original data if it's already under the limit
+  }
+
+  // Create a map to store nodes and their connection count
+  const nodeConnectionCount = new Map<string, number>();
+
+  // Count connections for each node
+  data.links.forEach(link => {
+    const sourceId = typeof link.source === 'object' ? (link.source as CustomNode).id : link.source;
+    const targetId = typeof link.target === 'object' ? (link.target as CustomNode).id : link.target;
+    
+    nodeConnectionCount.set(sourceId, (nodeConnectionCount.get(sourceId) || 0) + 1);
+    nodeConnectionCount.set(targetId, (nodeConnectionCount.get(targetId) || 0) + 1);
+  });
+
+  // Sort nodes by connection count (descending) and then by random factor
+  const sortedNodes = data.nodes
+    .sort((a, b) => {
+      const countDiff = (nodeConnectionCount.get(b.id) || 0) - (nodeConnectionCount.get(a.id) || 0);
+      return countDiff !== 0 ? countDiff : Math.random() - 0.5;
+    })
+    .slice(0, maxNodes);
+
+  const sampledNodes = new Set(sortedNodes);
+
+  // Filter links to include only those connecting sampled nodes
+  const sampledLinks = data.links.filter(
+    link => {
+      const sourceNode = typeof link.source === 'object' ? link.source : data.nodes.find(n => n.id === link.source);
+      const targetNode = typeof link.target === 'object' ? link.target : data.nodes.find(n => n.id === link.target);
+      return sourceNode && targetNode && sampledNodes.has(sourceNode) && sampledNodes.has(targetNode);
+    }
+  );
+
+  return {
+    nodes: Array.from(sampledNodes),
+    links: sampledLinks
+  };
+};
 
 const GraphViewer: React.FC<GraphViewerProps> = ({
   data,
@@ -123,7 +166,8 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   const initialGraphData = useRef<CustomGraphData>(data);
 
   useEffect(() => {
-    setGraphData(data);
+    const processedData = data.nodes.length > MAX_SAMPLE_NODES ? sampleGraphData(data, MAX_SAMPLE_NODES) : data;
+    setGraphData(processedData);
     initialGraphData.current = data;
   }, [data]);
 
@@ -232,8 +276,9 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
       links: [...newLinks],
     };
 
-    // Set the updated data to trigger re-render
-    setGraphData(updatedGraphData);
+    // Only sample if the updated data exceeds MAX_SAMPLE_NODES
+    const processedData = updatedGraphData.nodes.length > MAX_SAMPLE_NODES ? sampleGraphData(updatedGraphData, MAX_SAMPLE_NODES) : updatedGraphData;
+    setGraphData(processedData);
   };
 
   const fuse = new Fuse([...data.nodes, ...data.links], {
@@ -526,7 +571,9 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
     : includeTextUnits && includeCommunities;
 
   const clearSearchResults = () => {
-    setGraphData(initialGraphData.current);
+    const originalData = initialGraphData.current;
+    const processedData = originalData.nodes.length > MAX_SAMPLE_NODES ? sampleGraphData(originalData, MAX_SAMPLE_NODES) : originalData;
+    setGraphData(processedData);
     setApiSearchResults(null);
   };
 
